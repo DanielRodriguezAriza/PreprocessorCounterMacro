@@ -1,4 +1,4 @@
-#include "my_counter.h"
+#include "MY_COUNTER_counter.h"
 
 /*
 	Compile with:
@@ -11,16 +11,17 @@ int main()
 {
 	/* Counter usage BOOST style */
 	int x1 = MY_COUNTER;
-	#include UPDATE_MY_COUNTER()
+	#include MY_COUNTER_UPDATE()
 	
 	int y1 = MY_COUNTER;
-	#include UPDATE_MY_COUNTER()
+	#include MY_COUNTER_UPDATE()
 	
 	int z1 = MY_COUNTER;
-	#include UPDATE_MY_COUNTER()
+	#include MY_COUNTER_UPDATE()
 	char const *str1 = MY_COUNTER_TYPE;
 	
 	/* Counter usage single include style */
+	/*
 	int x2 =
 		#include MY_COUNTER_GET()
 	;
@@ -34,6 +35,7 @@ int main()
 	;
 	
 	char const *str2 = MY_COUNTER_TYPE;
+	*/
 	
 	return 0;
 }
