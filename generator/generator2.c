@@ -5,7 +5,12 @@
 #define DRA_COUNTER_GENERATOR_IMPLEMENTATION
 #include "generator.h"
 
-#define COUNTER_INFO_DEFAULT_CONFIGURATION {.name = "MY_COUNTER", .max_value = 10000, .iterations_per_file = 1000}
+void counter_set_default(counter_info *info)
+{
+	info->name = "MY_COUNTER";
+	info->max_value = 10000;
+	info->iterations_per_file = 1000;
+}
 
 /*
 typedef struct {
@@ -81,8 +86,11 @@ void counter_generate(counter_info *info)
 	generate_counter_files(info);
 }
 
-void parse_args(counter_info *info, int argc, char **argv)
+void parse_args(int argc, char **argv)
 {
+	counter_info info;
+	counter_set_default(&info);
+	
 	if(argc <= 1)
 	{
 		fprintf(stderr, "Usage : %s --run <args>\nUse --help for more information.\n", argv[0]);
@@ -91,10 +99,13 @@ void parse_args(counter_info *info, int argc, char **argv)
 	
 	for(int i = 1; i < argc; ++i)
 	{
+		
 		if(!strcmp(argv[i], "--run"))
 		{
 			fprintf(stdout, "Generating files for counter macro...\n");
-			counter_generate(info);
+			counter_generate(&info);
+			
+			counter_set_default(&info);
 		}
 		else
 		if(!strcmp(argv[i], "--help"))
@@ -116,7 +127,7 @@ void parse_args(counter_info *info, int argc, char **argv)
 		{
 			if(i + 1 < argc)
 			{
-				info->name = argv[i + 1];
+				info.name = argv[i + 1];
 				++i;
 			}
 			else
@@ -130,7 +141,7 @@ void parse_args(counter_info *info, int argc, char **argv)
 			if(i + 1 < argc)
 			{
 				int max_value = atoi(argv[i + 1]);
-				info->max_value = max_value;
+				info.max_value = max_value;
 				++i;
 			}
 			else
@@ -144,7 +155,7 @@ void parse_args(counter_info *info, int argc, char **argv)
 			if(i + 1 < argc)
 			{
 				int itrs = atoi(argv[i + 1]);
-				info->iterations_per_file = itrs;
+				info.iterations_per_file = itrs;
 				++i;
 			}
 			else
@@ -157,13 +168,12 @@ void parse_args(counter_info *info, int argc, char **argv)
 			fprintf(stderr, "ERROR : Uknown argument issued \"%s\".\n", argv[i]);
 		}
 	}
+	
 }
 
 int main(int argc, char **argv)
 {
-	counter_info info = COUNTER_INFO_DEFAULT_CONFIGURATION;
-	
-	parse_args(&info, argc, argv);
+	parse_args(argc, argv);
 	
 	return 0;
 }
