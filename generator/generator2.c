@@ -97,14 +97,16 @@ void parse_args(int argc, char **argv)
 		return;
 	}
 	
+	int args_have_been_issued;
+	
 	for(int i = 1; i < argc; ++i)
 	{
-		
 		if(!strcmp(argv[i], "--run"))
 		{
 			fprintf(stdout, "Generating files for counter macro...\n");
 			counter_generate(&info);
 			
+			args_have_been_issued = 0;
 			counter_set_default(&info);
 		}
 		else
@@ -129,6 +131,7 @@ void parse_args(int argc, char **argv)
 			{
 				info.name = argv[i + 1];
 				++i;
+				args_have_been_issued = 1;
 			}
 			else
 			{
@@ -143,6 +146,7 @@ void parse_args(int argc, char **argv)
 				int max_value = atoi(argv[i + 1]);
 				info.max_value = max_value;
 				++i;
+				args_have_been_issued = 1;
 			}
 			else
 			{
@@ -157,6 +161,7 @@ void parse_args(int argc, char **argv)
 				int itrs = atoi(argv[i + 1]);
 				info.iterations_per_file = itrs;
 				++i;
+				args_have_been_issued = 1;
 			}
 			else
 			{
@@ -169,6 +174,10 @@ void parse_args(int argc, char **argv)
 		}
 	}
 	
+	if(args_have_been_issued) /* The args have been issued but not consumed by a call to --run */
+	{
+		fprintf(stderr, "Warning : Arguments issued but not consumed. Did you forget a call to --run?\n");
+	}
 }
 
 int main(int argc, char **argv)
